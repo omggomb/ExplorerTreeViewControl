@@ -22,3 +22,16 @@ E:\Dropbox\ExplorerTreeView\ExplorerTreeView\obj\Debug\ExplorerTreeView.dll
 E:\Dropbox\ExplorerTreeView\ExplorerTreeView\obj\Debug\ExplorerTreeView.pdb
 E:\Dropbox\ExplorerTreeView\ExplorerTreeView\bin\Debug\OmgUtils.dll
 E:\Dropbox\ExplorerTreeView\ExplorerTreeView\bin\Debug\OmgUtils.pdb
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.csprojResolveAssemblyReference.cache
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.Properties.Resource1.resources
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.Properties.Resources.resources
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.Properties.Resources.en.resources
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.csproj.GenerateResource.Cache
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.dll
+E:\Dev\ExplorerTreeViewControl\bin\Debug\ExplorerTreeView.dll
+E:\Dev\ExplorerTreeViewControl\bin\Debug\ExplorerTreeView.pdb
+E:\Dev\ExplorerTreeViewControl\bin\Debug\en\ExplorerTreeView.resources.dll
+E:\Dev\ExplorerTreeViewControl\bin\Debug\OmgUtils.dll
+E:\Dev\ExplorerTreeViewControl\bin\Debug\OmgUtils.pdb
+E:\Dev\ExplorerTreeViewControl\obj\Debug\en\ExplorerTreeView.resources.dll
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.pdb

@@ -95,6 +95,12 @@ namespace ExplorerTreeView
 		/// </summary>
 		public  ContextMenu GlobalContextMenu {get; set;}
 		
+		
+		/// <summary>
+		/// Factory used inside the ExplorerTreeViewControl to create new items
+		/// </summary>
+		public static TreeItemFactory TreeItemFactory {get; private set; }
+		
 		string m_sWatchDir;
 		
 		// used to detect whether a file shoudl be cut or copied (contextmenu)
@@ -105,6 +111,7 @@ namespace ExplorerTreeView
 		delegate void RemoveItemDelegate(string sParentTreePath, string sIdentName);
 		
 		delegate void RenameItemDelegate(string sTreePathToItem, string sNewName, string sFullPathToRenamed);
+		
 		/**
 		 * CTOR
 		 */
@@ -154,8 +161,12 @@ namespace ExplorerTreeView
 		/// <summary>
 		/// Does a primer search and displays the contents of the WatchDir. Not recursive.
 		/// </summary>
-		public void InitializeTree()
+		public void InitializeTree(TreeItemFactory factory)
 		{
+			if (factory == null)
+				throw new ArgumentNullException();
+			
+			TreeItemFactory = factory;
 			SearchDirectory();
 		}
 		
@@ -214,90 +225,7 @@ namespace ExplorerTreeView
 		}
 		
 		
-		/// <summary>
-		/// Adds an item to the tree view.
-		/// </summary>
-		/// <param name="sParentTreePath">Path to the desired parent directroy, must start with the root entry, missing dirs are crerated along the way</param>
-		/// <param name="itemToAdd">The item to be added to the parent directory</param>
-		public void AddVirtualEntry(string sParentTreePath, CustomTreeItem itemToAdd)
-		{
-			if (itemToAdd == null)
-				return;
-			
-			// Make sure it's recognised as virtual
-			itemToAdd.IsVirtual = true;
-			
-			string trimmedString = sParentTreePath.Trim('\\');
-			var splitString = trimmedString.Split('\\');
-			
-			// If parent is empty, add to tree itself
-			if (splitString.Length == 0)
-			{
-				Items.Add(itemToAdd);
-				return;
-			}
-			
-			
-			// Get root
-			CustomTreeItem prevItem = GetTreeItemByPath(splitString[0], true);
-			
-			// The current item during travel
-			CustomTreeItem currentItem = null;
-			
-			// Create root if neccessary
-			if (prevItem == null)
-			{
-				prevItem = new CustomTreeItem()
-				{
-					IsVirtual = true,
-					IsDirectory = true,
-					IdentificationName = splitString[0],
-				};
-				
-				// Works because it's a directory
-				prevItem.MakeHeader();
-				
-				Items.Add(prevItem);
-				Items.Refresh();
-				
-			}
-			
-			// Travel down to the target directory
-			for (int i = 1; i < splitString.Length; ++i)
-			{
-				currentItem = prevItem.GetChildByIdentName(splitString[i]);
-				
-				// Create subsequent dirs if neccessary
-				if (currentItem == null)
-				{
-					currentItem = new CustomTreeItem()
-					{
-						IsVirtual = true,
-						IsDirectory = true,
-						IdentificationName = splitString[i],
-					};
-					
-					// Works because it's a directory
-					currentItem.MakeHeader();
-					
-					prevItem.Items.Add(currentItem);
-					prevItem.RefreshLiveSorting();
-					prevItem.Items.Refresh();
-				}
-				
-				prevItem = currentItem;
-			}
-			
-			// At this point currentItem points to the parent dir
-			
-			// Don't do anything if the file already exists
-			if (currentItem.GetChildByIdentName(itemToAdd.IdentificationName) != null)
-				return;
-			
-			currentItem.Items.Add(itemToAdd);
-			currentItem.RefreshLiveSorting();
-			currentItem.Items.Refresh();
-		}
+		
 		
 		/// <summary>
 		/// Assigns common key combinations to the tree view (CTRL - C etc)
@@ -344,7 +272,8 @@ namespace ExplorerTreeView
 		
 		void SearchDirectory()
 		{
-			var topLevel = new CustomTreeItem();
+			Items.Clear();
+			var topLevel = TreeItemFactory.CreateCustomTreeItemInstance();
 			topLevel.IsDirectory = true;
 			
 			var dirInf = new DirectoryInfo(WatchDir);
@@ -439,7 +368,7 @@ namespace ExplorerTreeView
 			// If the item is null, then the entry doesn't exist meaning it is not shown and does not need to be updated
 			if (parentItem != null && parentItem.IsExpanded == true)
 			{
-				var itemToAdd = new CustomTreeItem();
+				var itemToAdd = TreeItemFactory.CreateCustomTreeItemInstance();
 				
 				// We can safely assume that this is a valid path since only the file system watcher call this method
 				var splitPath = sFullPathToEntry.Split('\\');

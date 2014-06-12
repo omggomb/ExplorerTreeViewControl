@@ -252,8 +252,8 @@ namespace ExplorerTreeView
 				
 				foreach (var dir in dirInf.GetDirectories())
 				{
-					var item = new CustomTreeItem();
-					item.Items.Add(new CustomTreeItem());
+					var item = ExplorerTreeViewControl.TreeItemFactory.CreateCustomTreeItemInstance();
+					item.Items.Add(CreateNewDummyItem());
 					item.IsDirectory = true;
 					item.IdentificationName = dir.Name;
 					item.FullPathToReference = dir.FullName;
@@ -264,7 +264,7 @@ namespace ExplorerTreeView
 				
 				foreach (var file  in dirInf.GetFiles())
 				{
-					var item = new CustomTreeItem();
+					var item = ExplorerTreeViewControl.TreeItemFactory.CreateCustomTreeItemInstance();
 					item.FullPathToReference = file.FullName;
 					item.IdentificationName = file.Name;
 					item.IsDirectory = false;
