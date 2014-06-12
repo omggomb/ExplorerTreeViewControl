@@ -288,7 +288,7 @@ namespace ExplorerTreeView
 		/// Creates the header stack panel of this item.
 		/// </summary>
 		/// <param name="oEntryImage">If not null, this image will be used instead of the files'  one</param>
-		public void MakeHeader(System.Windows.Controls.Image oEntryImage = null)
+		public virtual void MakeHeader(System.Windows.Controls.Image oEntryImage = null)
 		{
 			var stack = new StackPanel();
 			stack.Orientation = Orientation.Horizontal;
@@ -334,7 +334,7 @@ namespace ExplorerTreeView
 			Header = stack;
 		}
 		
-		public void RefreshContextMenu(ContextMenu menu)
+		public virtual void RefreshContextMenu(ContextMenu menu)
 		{
 			if (menu == null)
 				return;
