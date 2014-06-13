@@ -136,7 +136,7 @@ namespace ExplorerTreeView
 				proc.Start();
 				
 				
-			
+				
 			};
 
 			MouseRightButtonDown += delegate(object sender, MouseButtonEventArgs e) { Focus(); e.Handled = true; };
@@ -352,11 +352,13 @@ namespace ExplorerTreeView
 		
 		public static CustomTreeItem CreateNewDummyItem()
 		{
-			return new CustomTreeItem()
-			{
-				Name = "DummyFolderItem",
-				IdentificationName = "DummyFolderItem"
-			};
+			var item = ExplorerTreeViewControl.TreeItemFactory.CreateCustomTreeItemInstance();
+			
+			item.Name = "DummyFolderItem";
+			item.IdentificationName = "DummyFolderItem";
+			
+			return item;
+
 		}
 		
 		/// <summary>
