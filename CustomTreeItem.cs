@@ -48,9 +48,19 @@ namespace ExplorerTreeView
 			}
 			set
 			{
+				// If no custom display name is set, use the file name
+				if (String.IsNullOrWhiteSpace(DisplayName))
+					DisplayName = value;
+				
 				m_itemComparerObject.sIdentificationName = value;
 			}
 		}
+		
+		/// <summary>
+		/// This name will be displayed inside the tree view.
+		/// Used by <see cref="MakeHeader"/>.
+		/// </summary>
+		public string DisplayName {get; set;}
 		
 		/// <summary>
 		/// Is this a directory or file?
@@ -115,11 +125,13 @@ namespace ExplorerTreeView
 		{
 			IdentificationName = "";
 			FullPathToReference = "";
+			DisplayName = "";
 			Items.IsLiveSorting = true;
 			IsDirectory = false;
 			IsVirtual = false;
 			
 			Expanded += HandleExpanded;
+			
 			Collapsed += delegate {
 				if (!IsExpanded)
 					m_bShouldUpdate = true;
@@ -133,13 +145,14 @@ namespace ExplorerTreeView
 				var start = new ProcessStartInfo(FullPathToReference);
 				
 				proc.StartInfo = start;
-				proc.Start();
-				
-				
-				
+				proc.Start();	
 			};
 
-			MouseRightButtonDown += delegate(object sender, MouseButtonEventArgs e) { Focus(); e.Handled = true; };
+			MouseRightButtonDown += delegate(object sender, MouseButtonEventArgs e)
+			{ 
+				Focus(); 
+				e.Handled = true; 
+			};
 			
 		}
 		#endregion
@@ -295,11 +308,7 @@ namespace ExplorerTreeView
 			
 			
 			System.Windows.Controls.Image image = null;
-			
-			
-			
-			
-			
+				
 			
 			if (IsDirectory)
 			{
@@ -337,8 +346,13 @@ namespace ExplorerTreeView
 			
 			stack.Children.Add(oEntryImage ?? image);
 			
+			string sNameToBeDisplayed = DisplayName;
+			
+			if (String.IsNullOrWhiteSpace(DisplayName))
+				sNameToBeDisplayed = IdentificationName;
+			
 			var lbl = new Label();
-			lbl.Content = IdentificationName;
+			lbl.Content = sNameToBeDisplayed;
 			
 			stack.Children.Add(lbl);
 			
@@ -356,10 +370,7 @@ namespace ExplorerTreeView
 			{
 				element.RefreshContextMenu(menu);
 			}
-		}
-		
-		
-		
+		}		
 		
 		public static CustomTreeItem CreateNewDummyItem()
 		{
