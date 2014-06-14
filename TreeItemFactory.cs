@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Windows.Controls;
 
 namespace ExplorerTreeView
 {
@@ -21,5 +22,13 @@ namespace ExplorerTreeView
 		/// <returns></returns>
 		CustomTreeItem CreateCustomTreeItemInstance();
 		
+		/// <summary>
+		/// Creates a new image to be used as folder icon inside the tree view
+		/// </summary>
+		/// <param name="itemThatIsUsed">The item that the folder icon will be added to </param>
+		/// <returns></returns>
+		Image CreateFolderIconImage(CustomTreeItem itemThatIsUsed);
+		
 	}
+	
 }

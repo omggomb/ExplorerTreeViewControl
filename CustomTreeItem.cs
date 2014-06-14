@@ -294,19 +294,26 @@ namespace ExplorerTreeView
 			stack.Orientation = Orientation.Horizontal;
 			
 			
-			var image = new System.Windows.Controls.Image();
+			System.Windows.Controls.Image image = null;
 			
 			
 			
 			
-			BitmapSource src = null;
+			
 			
 			if (IsDirectory)
 			{
-				src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(Properties.Resource1.SimpleFolderIcon.Handle,
+				
+				image = ExplorerTreeViewControl.TreeItemFactory.CreateFolderIconImage(this);
+				
+				if (image == null)
+				{
+					image = new System.Windows.Controls.Image();
+					var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(Properties.Resource1.SimpleFolderIcon.Handle,
 				                                                                 Int32Rect.Empty,
 				                                                                 BitmapSizeOptions.FromEmptyOptions());
-				
+					image.Source = src;
+				}
 			}
 			else
 			{
@@ -314,15 +321,19 @@ namespace ExplorerTreeView
 				{
 					var icon = Icon.ExtractAssociatedIcon(FullPathToReference);
 					
-					src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
+					var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
 					                                                                 Int32Rect.Empty,
 					                                                                 BitmapSizeOptions.FromEmptyOptions());
+					
+					image = new System.Windows.Controls.Image();
+					
+					image.Source = src;
+					
+					
 				}
 				
 				
 			}
-			
-			image.Source = src;
 			
 			stack.Children.Add(oEntryImage ?? image);
 			

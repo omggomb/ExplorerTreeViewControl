@@ -74,7 +74,9 @@ namespace ExplorerTreeView
 			
 			foreach (var dirInf in dir.GetDirectories())
 			{
-				var dirEntry = new FileSystemEntry(dirInf.FullName, dirInf.Name, true, /*Properties.Resource1.SimpleFolderIcon*/ null);
+				var dirEntry = new FileSystemEntry(dirInf.FullName, dirInf.Name, true, /*Properties.
+				                                    
+				                                    */ null);
 				
 				
 				SearchSubDir(dirInf, ref dirEntry);
