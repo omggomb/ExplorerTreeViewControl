@@ -113,6 +113,9 @@ namespace ExplorerTreeView
 		
 		delegate void RenameItemDelegate(string sTreePathToItem, string sNewName, string sFullPathToRenamed);
 		
+		
+	
+		
 		/**
 		 * CTOR
 		 */
@@ -306,7 +309,7 @@ namespace ExplorerTreeView
 					
 					var converter = new KeyConverter();
 					
-					char c = (char) converter.ConvertFrom(e.Key);
+					char c = (char) KeyInterop.VirtualKeyFromKey(e.Key);
 					
 					parent.SelectNextChildStartingWith(c);
 				}
