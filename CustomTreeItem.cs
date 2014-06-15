@@ -252,6 +252,8 @@ namespace ExplorerTreeView
 			// We'll only use it for directories
 			if (!IsDirectory)
 				return;
+			
+			c = Char.ToUpper(c);
 		
 			
 			if (c == m_cLastCharSearchedFor)
