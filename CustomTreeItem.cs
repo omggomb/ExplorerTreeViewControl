@@ -253,7 +253,7 @@ namespace ExplorerTreeView
 			if (!IsDirectory)
 				return;
 			
-			c = Char.ToUpper(c);
+			
 		
 			
 			if (c == m_cLastCharSearchedFor)
@@ -452,6 +452,7 @@ namespace ExplorerTreeView
 		{
 			int nResult = -1;
 			
+			
 			for (int i = nStartPos; i < Items.Count; ++i)
 			{
 				var item = Items.GetItemAt(i) as CustomTreeItem;
@@ -460,7 +461,7 @@ namespace ExplorerTreeView
 				{
 					if (!String.IsNullOrWhiteSpace(item.DisplayName))
 					{
-						if (c == item.DisplayName[0])
+						if (c == Char.ToLower(item.DisplayName[0]))
 						{
 							nResult = i;
 							break;
@@ -482,7 +483,7 @@ namespace ExplorerTreeView
 					{
 						if (!String.IsNullOrWhiteSpace(item.DisplayName))
 						{
-							if (c == item.DisplayName[0])
+							if (c == Char.ToLower(item.DisplayName[0]))
 							{
 								nResult = i;
 								break;

@@ -310,6 +310,7 @@ namespace ExplorerTreeView
 					var converter = new KeyConverter();
 					
 					char c = (char) KeyInterop.VirtualKeyFromKey(e.Key);
+					c = Char.ToLower(c);
 					
 					parent.SelectNextChildStartingWith(c);
 				}
