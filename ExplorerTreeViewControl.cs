@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -146,6 +147,8 @@ namespace ExplorerTreeView
 			
 			SetupGlobalContextMenu();
 			SetupContextMenuShortCuts();
+			
+			KeyDown += HandleKeyDown;
 		}
 
 		
@@ -289,6 +292,28 @@ namespace ExplorerTreeView
 			
 			topLevel.IsExpanded = true;
 		}
+
+		void HandleKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+		{
+			// Only process if no system key (ctrl etc is pressed) since the are meant to trigger shortcuts
+			if (e.SystemKey == Key.None)
+			{
+				var item = SelectedItem as CustomTreeItem;
+				
+				if (item != null)
+				{
+					var parent  = item.GetParentSave();
+					
+					var converter = new KeyConverter();
+					
+					char c = (char) converter.ConvertFrom(e.Key);
+					
+					parent.SelectNextChildStartingWith(c);
+				}
+				
+			}
+		}
+		
 		
 		#region Filesystemwatcher handling
 		void OnEntryChanged(object sender, FileSystemEventArgs e)

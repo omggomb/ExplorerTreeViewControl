@@ -118,6 +118,18 @@ namespace ExplorerTreeView
 		
 		bool m_bShouldUpdate = true;
 		
+		/// <summary>
+		/// The character with with searched items should start with
+		/// If with a new request it's the same, then we can use m_nLastSelectedIndex, else we
+		/// need to search for the new char again
+		/// </summary>
+		char m_cLastCharSearchedFor;
+		
+		/// <summary>
+		/// The index of the last selected item starting with m_cLastCharSearchedFor
+		/// </summary>
+		int m_nLastSelectedIndex;
+		
 		#endregion
 		
 		#region CTOR
@@ -145,13 +157,13 @@ namespace ExplorerTreeView
 				var start = new ProcessStartInfo(FullPathToReference);
 				
 				proc.StartInfo = start;
-				proc.Start();	
+				proc.Start();
 			};
 
 			MouseRightButtonDown += delegate(object sender, MouseButtonEventArgs e)
-			{ 
-				Focus(); 
-				e.Handled = true; 
+			{
+				Focus();
+				e.Handled = true;
 			};
 			
 		}
@@ -228,6 +240,40 @@ namespace ExplorerTreeView
 				return this;
 			else
 				return Parent as CustomTreeItem;
+		}
+		
+		/// <summary>
+		/// Only works for directories!
+		/// Searches the next item of which the display name starts with c, and if found selects it.
+		/// </summary>
+		/// <param name="c">Character with which the items should start</param>
+		public void SelectNextChildStartingWith(char c)
+		{
+			// We'll only use it for directories
+			if (!IsDirectory)
+				return;
+		
+			
+			if (c == m_cLastCharSearchedFor)
+			{
+				m_nLastSelectedIndex = SearchNextChildStartingWith(c, m_nLastSelectedIndex + 1);
+			}
+			else
+			{
+				m_nLastSelectedIndex = SearchNextChildStartingWith(c, 0);
+				m_cLastCharSearchedFor = c;
+			}
+			
+			// Only select next if found at all
+			if (m_nLastSelectedIndex != -1) 
+			{
+				var itemToBeSeleted = Items[m_nLastSelectedIndex] as TreeViewItem;
+				
+				if (itemToBeSeleted != null)
+					itemToBeSeleted.Focus();
+				
+			}
+			
 		}
 		
 		#endregion
@@ -308,7 +354,7 @@ namespace ExplorerTreeView
 			
 			
 			System.Windows.Controls.Image image = null;
-				
+			
 			
 			if (IsDirectory)
 			{
@@ -319,8 +365,8 @@ namespace ExplorerTreeView
 				{
 					image = new System.Windows.Controls.Image();
 					var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(Properties.Resource1.SimpleFolderIcon.Handle,
-				                                                                 Int32Rect.Empty,
-				                                                                 BitmapSizeOptions.FromEmptyOptions());
+					                                                                     Int32Rect.Empty,
+					                                                                     BitmapSizeOptions.FromEmptyOptions());
 					image.Source = src;
 				}
 			}
@@ -331,8 +377,8 @@ namespace ExplorerTreeView
 					var icon = Icon.ExtractAssociatedIcon(FullPathToReference);
 					
 					var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHIcon(icon.Handle,
-					                                                                 Int32Rect.Empty,
-					                                                                 BitmapSizeOptions.FromEmptyOptions());
+					                                                                     Int32Rect.Empty,
+					                                                                     BitmapSizeOptions.FromEmptyOptions());
 					
 					image = new System.Windows.Controls.Image();
 					
@@ -370,7 +416,7 @@ namespace ExplorerTreeView
 			{
 				element.RefreshContextMenu(menu);
 			}
-		}		
+		}
 		
 		public static CustomTreeItem CreateNewDummyItem()
 		{
@@ -392,6 +438,60 @@ namespace ExplorerTreeView
 			// Reverted back to simple but slow solution since we don't update changed files in collapsed items
 			
 			return m_bShouldUpdate;
+		}
+		
+		/// <summary>
+		/// Searches the next child of which the display name starts with c
+		/// </summary>
+		/// <param name="c">The character to be searched for</param>
+		/// <param name="nStartPos">Position at which to start searching</param>
+		/// <returns>If found the first occurence after nStartPos, else -1</returns>
+		int SearchNextChildStartingWith(char c, int nStartPos)
+		{
+			int nResult = -1;
+			
+			for (int i = nStartPos; i < Items.Count; ++i)
+			{
+				var item = Items.GetItemAt(i) as CustomTreeItem;
+				
+				if (item != null)
+				{
+					if (!String.IsNullOrWhiteSpace(item.DisplayName))
+					{
+						if (c == item.DisplayName[0])
+						{
+							nResult = i;
+							break;
+						}
+						
+					}
+				}
+			}
+			
+			// Need to do a new search from start
+			if (nResult == -1)
+			{
+				// Can't use function here because of recursion
+				for (int i = 0; i < Items.Count; ++i)
+				{
+					var item = Items.GetItemAt(i) as CustomTreeItem;
+					
+					if (item != null)
+					{
+						if (!String.IsNullOrWhiteSpace(item.DisplayName))
+						{
+							if (c == item.DisplayName[0])
+							{
+								nResult = i;
+								break;
+							}
+							
+						}
+					}
+				}
+			}
+			
+			return nResult;
 		}
 
 		
