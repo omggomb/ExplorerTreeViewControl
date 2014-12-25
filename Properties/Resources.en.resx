@@ -129,4 +129,7 @@
   <data name="ButtonOpenInExplorer" xml:space="preserve">
     <value>Open in explorer</value>
   </data>
+  <data name="ButtonCreateHardLink" xml:space="preserve">
+    <value>Create hard link</value>
+  </data>
 </root>

@@ -299,7 +299,10 @@ namespace ExplorerTreeView
 		void HandleKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
 		{
 			// Only process if no system key (ctrl etc is pressed) since the are meant to trigger shortcuts
-			if (e.SystemKey == Key.None)
+			if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl) &&
+			   !Keyboard.IsKeyDown(Key.LeftAlt) && !Keyboard.IsKeyDown(Key.RightAlt) &&
+			  !Keyboard.IsKeyDown(Key.LeftShift) && !Keyboard.IsKeyDown(Key.RightShift) &&
+			 e.Key != Key.Delete && e.Key != Key.F2)
 			{
 				var item = SelectedItem as CustomTreeItem;
 				
@@ -439,11 +442,12 @@ namespace ExplorerTreeView
 			
 			if (item != null)
 			{
-				var parent = item.Parent as CustomTreeItem;
+				var parent = item.GetParentSave();
 				
 				if (parent != null)
 				{
 					item.IdentificationName = sNewName;
+					item.DisplayName = sNewName;
 					item.FullPathToReference = sFullPathToRenamed;
 					item.MakeHeader();
 					
@@ -495,6 +499,12 @@ namespace ExplorerTreeView
 			contextMenuItem.Header = Properties.Resources.ButtonPaste;
 			contextMenuItem.Click += OnContextPasteClicked;
 			GlobalContextMenu.Items.Add(contextMenuItem);
+
+            // Create hard link or junction
+            contextMenuItem = new MenuItem();
+            contextMenuItem.Header = Properties.Resources.ButtonCreateHardLink;
+            contextMenuItem.Click += OnContextCreateHardLinkClicked;
+            GlobalContextMenu.Items.Add(contextMenuItem);
 			
 			// Rename
 			contextMenuItem = new MenuItem();
@@ -522,9 +532,21 @@ namespace ExplorerTreeView
 			contextMenuItem.Click += OnContextOpenInExplorerClicked;
 			GlobalContextMenu.Items.Add(contextMenuItem);
 			
-			
-			
 		}
+
+        private void OnContextCreateHardLinkClicked(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = SelectedItem as CustomTreeItem;
+
+            if (selectedItem != null)
+            {
+                var dialogWindow = ConstructHardLinkDialog(selectedItem);
+
+                dialogWindow.ShowDialog();
+            }
+        }
+
+        
 		
 		void  OnContextCopyClicked(object sender, RoutedEventArgs e)
 		{
@@ -600,6 +622,8 @@ namespace ExplorerTreeView
 						
 						if (m_bIsFileCut)
 						{
+							
+				
 							FileSystem.MoveFile(fileSource, fileTarget, UIOption.AllDialogs, UICancelOption.DoNothing);
 						}
 						else
@@ -735,11 +759,11 @@ namespace ExplorerTreeView
 					if (boxWithNewName.Text.IndexOf('.') != -1)
 					{
 						var resu = MessageBox.Show(Properties.Resources.AskOverrideExtension, Properties.Resources.CommonNotice,
-						                          MessageBoxButton.OKCancel, MessageBoxImage.Question);
+							           MessageBoxButton.OKCancel, MessageBoxImage.Question);
 						
 						if (resu == MessageBoxResult.Cancel)
-							return ;
-						else if (resu == MessageBoxResult.No)
+							return;
+						if (resu == MessageBoxResult.No)
 						{
 							boxWithNewName.Text = boxWithNewName.Text.Substring(0, boxWithNewName.Text.IndexOf('.'));
 						}
@@ -813,6 +837,101 @@ namespace ExplorerTreeView
 			
 			return ;
 		}
+
+        /// <summary>
+        /// Constructs a window that asks the user to enter a location for the hardlink that is to be created
+        /// </summary>
+        /// <returns></returns>
+        private Window ConstructHardLinkDialog(CustomTreeItem treeItem)
+        {
+            var window = new Window();
+            window.Title = Properties.Resources.ButtonCreateHardLink;
+            window.SizeToContent = SizeToContent.WidthAndHeight;
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            // Text label
+            var label = new Label();
+            label.Content = Properties.Resources.MessageHardlinkOrJunction;
+            label.SetValue(Grid.ColumnProperty, 0);
+            label.SetValue(Grid.RowProperty, 0);
+            label.SetValue(Grid.ColumnSpanProperty, 2);
+
+            // Text box for directory
+            var textBox = new TextBox();
+            textBox.Text = Properties.Resources.EnterPathHere;
+            textBox.SetValue(Grid.ColumnProperty, 0);
+            textBox.SetValue(Grid.RowProperty, 1);
+
+            // Browse button
+            var browseButton = new Button();
+            browseButton.Content = Properties.Resources.ButtonBrowse;
+            browseButton.SetValue(Grid.ColumnProperty, 1);
+            browseButton.SetValue(Grid.RowProperty, 1);
+
+            // OK Button
+            var okButton = new Button();
+            okButton.Content = Properties.Resources.ButtonOK;
+            okButton.SetValue(Grid.ColumnProperty, 0);
+            okButton.SetValue(Grid.RowProperty, 2);
+            okButton.Click += delegate 
+            {
+                TryCreateHardLink(treeItem);
+            };
+
+            // Cancel Button
+            var cancelButton = new Button();
+            cancelButton.Content = Properties.Resources.ButtonCancel;
+            cancelButton.SetValue(Grid.ColumnProperty, 1);
+            cancelButton.SetValue(Grid.RowProperty, 2);
+            cancelButton.Click += delegate
+            {
+                window.Close();
+            };
+
+            // Grid container
+            var grid = new Grid();
+
+            // Column 0
+            var columnDef = new ColumnDefinition();
+            columnDef.Width = new GridLength(70, GridUnitType.Star);
+            grid.ColumnDefinitions.Add(columnDef);
+
+            // Collumn 1
+            columnDef = new ColumnDefinition();
+            columnDef.Width = new GridLength(30, GridUnitType.Star);
+            grid.ColumnDefinitions.Add(columnDef);
+
+            // Row 0
+            var rowDef = new RowDefinition();
+            rowDef.Height = new GridLength(33, GridUnitType.Star);
+            grid.RowDefinitions.Add(rowDef);
+
+            // Row 1
+            rowDef = new RowDefinition();
+            rowDef.Height = new GridLength(33, GridUnitType.Star);
+            grid.RowDefinitions.Add(rowDef);
+
+            // Row 2
+            rowDef = new RowDefinition();
+            rowDef.Height = new GridLength(33, GridUnitType.Star);
+            grid.RowDefinitions.Add(rowDef);
+
+            // Add all elements to grid
+            grid.Children.Add(label);
+            grid.Children.Add(textBox);
+            grid.Children.Add(browseButton);
+            grid.Children.Add(okButton);
+            grid.Children.Add(cancelButton);
+
+            window.Content = grid;
+
+            return window;
+        }
+
+        private void TryCreateHardLink(CustomTreeItem item)
+        {
+            OmgUtils.UserInteraction.UserInteractionUtils.ShowInfoMessageBox("This ain't implemented yet");
+        }
 		
 		#endregion
 		#endregion

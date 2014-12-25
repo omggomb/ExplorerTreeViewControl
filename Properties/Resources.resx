@@ -162,4 +162,22 @@
   <data name="DirectoryMessage" xml:space="preserve">
     <value>Please enter a name for the new directory!</value>
   </data>
+  <data name="ButtonBrowse" xml:space="preserve">
+    <value>...</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ButtonCreateHardLink" xml:space="preserve">
+    <value>Create hard link</value>
+  </data>
+  <data name="ButtonOK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="EnterPathHere" xml:space="preserve">
+    <value>&lt;Enter path&gt;</value>
+  </data>
+  <data name="MessageHardlinkOrJunction" xml:space="preserve">
+    <value>This creates a hardlink (file) or junction (directory) at the specified location</value>
+  </data>
 </root>

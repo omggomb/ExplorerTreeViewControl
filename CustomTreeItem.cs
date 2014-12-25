@@ -239,7 +239,11 @@ namespace ExplorerTreeView
 			if (Parent == null)
 				return this;
 			else
-				return Parent as CustomTreeItem;
+			{
+				var item =  Parent as CustomTreeItem;
+				
+				return item ?? this;
+			}
 		}
 		
 		/// <summary>
