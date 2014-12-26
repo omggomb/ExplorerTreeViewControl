@@ -46,6 +46,7 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml">
@@ -64,6 +65,12 @@
     <Compile Include="DirectorySearcher.cs" />
     <Compile Include="ExplorerTreeViewControl.cs" />
     <Compile Include="FileSystemEntry.cs" />
+    <Compile Include="HardLink.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HardLink.Designer.cs">
+      <DependentUpon>HardLink.cs</DependentUpon>
+    </Compile>
     <Compile Include="ItemComparer.cs" />
     <Compile Include="LoadingAnimation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +91,9 @@
     <Compile Include="TreeItemFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="HardLink.resx">
+      <DependentUpon>HardLink.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource1.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>

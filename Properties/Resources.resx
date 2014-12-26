@@ -180,4 +180,16 @@
   <data name="MessageHardlinkOrJunction" xml:space="preserve">
     <value>This creates a hardlink (file) or junction (directory) at the specified location</value>
   </data>
+  <data name="ChooseLinkFolder" xml:space="preserve">
+    <value>Choose the folder that should hold the created link</value>
+  </data>
+  <data name="ChooseLinkName" xml:space="preserve">
+    <value>Choose a name for the link (extension will be added if missing)</value>
+  </data>
+  <data name="FileAlreadyExists" xml:space="preserve">
+    <value>The specified item already exists, please choose another one</value>
+  </data>
+  <data name="FolderNotExisting" xml:space="preserve">
+    <value>The specified folder does not exist, pleas choose an existing one</value>
+  </data>
 </root>

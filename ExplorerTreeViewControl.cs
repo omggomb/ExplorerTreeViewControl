@@ -540,9 +540,9 @@ namespace ExplorerTreeView
 
             if (selectedItem != null)
             {
-                var dialogWindow = ConstructHardLinkDialog(selectedItem);
+                var link = new HardLink(selectedItem);
 
-                dialogWindow.ShowDialog();
+                link.ShowDialog();
             }
         }
 
@@ -806,133 +806,37 @@ namespace ExplorerTreeView
 			                                                                  Properties.Resources.CommonOK,
 			                                                                 Properties.Resources.CommonCancel);
 		}
-		
-		void AddNewDirFromUserEntry(TextBox boxWithName, MessageBoxResult res)
-		{
-			if (res == MessageBoxResult.Cancel)
-				return;
-			if (SelectedItem != null && !String.IsNullOrWhiteSpace(boxWithName.Text))
-			{
-				var item = SelectedItem as CustomTreeItem;
-				
-				if (item != null)
-				{
-					if (!item.IsDirectory)
-					{
-						item = item.GetParentSave();
-					}
-					
-					string newDir = item.FullPathToReference + "\\" + boxWithName.Text;
-					
-					try
-					{
-						FileSystem.CreateDirectory(newDir);
-					} 
-					catch (Exception e)
-					{
-						OmgUtils.UserInteraction.UserInteractionUtils.ShowErrorMessageBox(e.Message, Properties.Resources.CommonError);
-					}
-				}
-			}
-			
-			return ;
-		}
 
-        /// <summary>
-        /// Constructs a window that asks the user to enter a location for the hardlink that is to be created
-        /// </summary>
-        /// <returns></returns>
-        private Window ConstructHardLinkDialog(CustomTreeItem treeItem)
+        void AddNewDirFromUserEntry(TextBox boxWithName, MessageBoxResult res)
         {
-            var window = new Window();
-            window.Title = Properties.Resources.ButtonCreateHardLink;
-            window.SizeToContent = SizeToContent.WidthAndHeight;
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            // Text label
-            var label = new Label();
-            label.Content = Properties.Resources.MessageHardlinkOrJunction;
-            label.SetValue(Grid.ColumnProperty, 0);
-            label.SetValue(Grid.RowProperty, 0);
-            label.SetValue(Grid.ColumnSpanProperty, 2);
-
-            // Text box for directory
-            var textBox = new TextBox();
-            textBox.Text = Properties.Resources.EnterPathHere;
-            textBox.SetValue(Grid.ColumnProperty, 0);
-            textBox.SetValue(Grid.RowProperty, 1);
-
-            // Browse button
-            var browseButton = new Button();
-            browseButton.Content = Properties.Resources.ButtonBrowse;
-            browseButton.SetValue(Grid.ColumnProperty, 1);
-            browseButton.SetValue(Grid.RowProperty, 1);
-
-            // OK Button
-            var okButton = new Button();
-            okButton.Content = Properties.Resources.ButtonOK;
-            okButton.SetValue(Grid.ColumnProperty, 0);
-            okButton.SetValue(Grid.RowProperty, 2);
-            okButton.Click += delegate 
+            if (res == MessageBoxResult.Cancel)
+                return;
+            if (SelectedItem != null && !String.IsNullOrWhiteSpace(boxWithName.Text))
             {
-                TryCreateHardLink(treeItem);
-            };
+                var item = SelectedItem as CustomTreeItem;
 
-            // Cancel Button
-            var cancelButton = new Button();
-            cancelButton.Content = Properties.Resources.ButtonCancel;
-            cancelButton.SetValue(Grid.ColumnProperty, 1);
-            cancelButton.SetValue(Grid.RowProperty, 2);
-            cancelButton.Click += delegate
-            {
-                window.Close();
-            };
+                if (item != null)
+                {
+                    if (!item.IsDirectory)
+                    {
+                        item = item.GetParentSave();
+                    }
 
-            // Grid container
-            var grid = new Grid();
+                    string newDir = item.FullPathToReference + "\\" + boxWithName.Text;
 
-            // Column 0
-            var columnDef = new ColumnDefinition();
-            columnDef.Width = new GridLength(70, GridUnitType.Star);
-            grid.ColumnDefinitions.Add(columnDef);
+                    try
+                    {
+                        FileSystem.CreateDirectory(newDir);
+                    }
+                    catch (Exception e)
+                    {
+                        OmgUtils.UserInteraction.UserInteractionUtils.ShowErrorMessageBox(e.Message, Properties.Resources.CommonError);
+                    }
+                }
+            }
 
-            // Collumn 1
-            columnDef = new ColumnDefinition();
-            columnDef.Width = new GridLength(30, GridUnitType.Star);
-            grid.ColumnDefinitions.Add(columnDef);
-
-            // Row 0
-            var rowDef = new RowDefinition();
-            rowDef.Height = new GridLength(33, GridUnitType.Star);
-            grid.RowDefinitions.Add(rowDef);
-
-            // Row 1
-            rowDef = new RowDefinition();
-            rowDef.Height = new GridLength(33, GridUnitType.Star);
-            grid.RowDefinitions.Add(rowDef);
-
-            // Row 2
-            rowDef = new RowDefinition();
-            rowDef.Height = new GridLength(33, GridUnitType.Star);
-            grid.RowDefinitions.Add(rowDef);
-
-            // Add all elements to grid
-            grid.Children.Add(label);
-            grid.Children.Add(textBox);
-            grid.Children.Add(browseButton);
-            grid.Children.Add(okButton);
-            grid.Children.Add(cancelButton);
-
-            window.Content = grid;
-
-            return window;
+            return;
         }
-
-        private void TryCreateHardLink(CustomTreeItem item)
-        {
-            OmgUtils.UserInteraction.UserInteractionUtils.ShowInfoMessageBox("This ain't implemented yet");
-        }
-		
 		#endregion
 		#endregion
 		

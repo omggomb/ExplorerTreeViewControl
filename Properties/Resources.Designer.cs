@@ -178,6 +178,24 @@ namespace ExplorerTreeView.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose the folder that should hold the created link.
+        /// </summary>
+        public static string ChooseLinkFolder {
+            get {
+                return ResourceManager.GetString("ChooseLinkFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a name for the link (extension will be added if missing).
+        /// </summary>
+        public static string ChooseLinkName {
+            get {
+                return ResourceManager.GetString("ChooseLinkName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string CommonCancel {
@@ -228,6 +246,24 @@ namespace ExplorerTreeView.Properties {
         public static string EnterPathHere {
             get {
                 return ResourceManager.GetString("EnterPathHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified item already exists, please choose another one.
+        /// </summary>
+        public static string FileAlreadyExists {
+            get {
+                return ResourceManager.GetString("FileAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The specified folder does not exist, pleas choose an existing one.
+        /// </summary>
+        public static string FolderNotExisting {
+            get {
+                return ResourceManager.GetString("FolderNotExisting", resourceCulture);
             }
         }
         
