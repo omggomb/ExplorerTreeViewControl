@@ -557,6 +557,7 @@ namespace ExplorerTreeView
 
            if (selectedItem != null)
            {
+        
                LinkingDialog.ShowThisDialog(selectedItem);
            }
         }

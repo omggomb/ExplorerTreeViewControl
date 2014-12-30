@@ -32,7 +32,7 @@ namespace ExplorerTreeView
             m_selectedItem = selectedItem;
 
             var instance = new LinkingDialog();
-
+            instance.StartPosition = FormStartPosition.CenterParent;
             // Buttons for browsing
             instance.sourceBrowseButton.Text = Properties.Resources.ButtonBrowse;
             instance.destinationBrowseButton.Text = Properties.Resources.ButtonBrowse;
