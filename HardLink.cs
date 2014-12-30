@@ -9,86 +9,176 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using Microsoft.VisualBasic.FileIO;
+using System.IO;
 using System.Diagnostics;
 
 namespace ExplorerTreeView
 {
-    public partial class HardLink : Form
+    public partial class LinkingDialog : Form
     {
-        private CustomTreeItem m_selectedItem = null;
+        private static CustomTreeItem m_selectedItem = null;
 
        
-        public HardLink(CustomTreeItem selectedItem)
+        private LinkingDialog()
         {
             InitializeComponent();
+        }
+
+        public static void ShowThisDialog(CustomTreeItem selectedItem)
+        {
+            if (selectedItem == null)
+                throw new ArgumentNullException("selectedItem");
 
             m_selectedItem = selectedItem;
 
-            if (m_selectedItem == null)
-                throw new ArgumentNullException("selectedItem");
+            var instance = new LinkingDialog();
 
-            linkNameTextBox.Text = m_selectedItem.IdentificationName;
+            // Buttons for browsing
+            instance.sourceBrowseButton.Text = Properties.Resources.ButtonBrowse;
+            instance.destinationBrowseButton.Text = Properties.Resources.ButtonBrowse;
 
-            Text = Properties.Resources.ButtonCreateHardLink;
-            infoLabel.Text = Properties.Resources.MessageHardlinkOrJunction;
-            folderLabel.Text = Properties.Resources.ChooseLinkFolder;
-            linkNameLabel.Text = Properties.Resources.ChooseLinkName;
-            browseButton.Text = Properties.Resources.ButtonBrowse;
-            okButton.Text = Properties.Resources.ButtonOK;
-            cancelButton.Text = Properties.Resources.ButtonCancel;
+            // OK Cancel buttons
+            instance.okButton.Text = Properties.Resources.ButtonOK;
+            instance.cancelButton.Text = Properties.Resources.ButtonCancel;
+
+            // Browsing destination is the same for both
+            instance.destinationBrowseButton.Click += instance.BrowseDestinationFolder;
+
+            // Creating the link / junction works the same for both
+            instance.okButton.Click += instance.CreateHardLink;
+
+            if (selectedItem.IsDirectory)
+            {
+                
+                instance.InitJunctionDialog();
+            }
+            else
+            {
+               
+                instance.InitHardLinkDialog();
+            }
+
+            instance.ShowDialog();
         }
 
-        private void browseButton_Click(object sender, EventArgs e)
+        private void InitHardLinkDialog()
         {
-            var folderBrowserDialog = new FolderBrowserDialog();
+            Text = Properties.Resources.ButtonCreateHardLink;
+            destinationTextBox.Text = Properties.Resources.HardLinkDestinationDesc;
+            destinationLabe.Text = Properties.Resources.HardLinkDestination;
+            sourceFolderPathTextBox.Text = m_selectedItem.FullPathToReference;
+            infoLabel.Text = Properties.Resources.MessageHardlinkOrJunction;
+            folderLabel.Text = Properties.Resources.HardLinkSource;
 
-            var res = folderBrowserDialog.ShowDialog();
+            sourceBrowseButton.Click += BrowseSourceFile;
+            
+        }
+
+        private void CreateHardLink(object sender, EventArgs e)
+        {
+            // H for hard link, J for junction
+            string sLinkFlag = "/H";
+            string sSource = sourceFolderPathTextBox.Text;
+            string sDestination = "";
+
+            // The path to the destination folder
+            string sTrimmedPath = OmgUtils.Path.PathUtils.CheckFolderPath(destinationTextBox.Text);
+
+            try
+            {
+                if (m_selectedItem.IsDirectory)
+                {
+                    sLinkFlag = "/J";
+                    var dirInfo = new DirectoryInfo(sSource);
+
+                    // Construct the full path                
+                    sTrimmedPath += dirInfo.Name + '\\';
+                    sDestination = sTrimmedPath;
+                }
+                else
+                {
+                    var fileInfo = new FileInfo(sSource);
+
+                    // Same sheme as for junctions
+                    sTrimmedPath += fileInfo.Name;
+                    sDestination = sTrimmedPath;
+                }
+            }
+            catch (Exception ex)
+            {
+                OmgUtils.UserInteraction.UserInteractionUtils.ShowErrorMessageBox(ex.Message, Properties.Resources.CommonError);
+            }
+
+            RunMKLink(sLinkFlag, sSource, sDestination);
+        }
+
+        private void BrowseSourceFile(object sender, EventArgs e)
+        {
+            var fileDialog = new OpenFileDialog();
+            fileDialog.InitialDirectory = m_selectedItem.FullPathToReference;
+
+            var res = fileDialog.ShowDialog();
+            if (res == System.Windows.Forms.DialogResult.OK)
+            {
+                sourceFolderPathTextBox.Text = fileDialog.FileName;
+                sourceFolderPathTextBox.SelectionStart = sourceFolderPathTextBox.Text.Length - 1;
+            }
+        }
+
+        private void BrowseDestinationFolder(object sender, EventArgs e)
+        {
+            var folderDialog = new FolderBrowserDialog();
+            folderDialog.SelectedPath = m_selectedItem.FullPathToReference;
+
+            var res = folderDialog.ShowDialog();
 
             if (res == System.Windows.Forms.DialogResult.OK)
             {
-                folderPathTextBox.Text = folderBrowserDialog.SelectedPath;
-                folderPathTextBox.SelectionStart = folderPathTextBox.Text.Length - 1;
+                destinationTextBox.Text = folderDialog.SelectedPath;
+                destinationTextBox.SelectionStart = destinationTextBox.Text.Length - 1;
+            }
+            
+        }
+
+        private void InitJunctionDialog()
+        {
+            Text = Properties.Resources.ButtonCreateJunction;
+            destinationTextBox.Text = Properties.Resources.JunctionDestinationDesc;
+            destinationLabe.Text = Properties.Resources.JunctionDestination;
+            sourceFolderPathTextBox.Text = m_selectedItem.FullPathToReference;
+            infoLabel.Text = Properties.Resources.MessageNewJunction;
+            folderLabel.Text = Properties.Resources.JunctionSource;
+
+            sourceBrowseButton.Click += BrowseSourceFolder;
+        }
+
+        private void BrowseSourceFolder(object sender, EventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.SelectedPath = m_selectedItem.FullPathToReference;
+
+            var res = dialog.ShowDialog();
+
+            if (res == System.Windows.Forms.DialogResult.OK)
+            {
+                sourceFolderPathTextBox.Text = dialog.SelectedPath;
+                sourceFolderPathTextBox.SelectionStart = sourceFolderPathTextBox.Text.Length - 1;
             }
         }
 
-        private void okButton_Click(object sender, EventArgs e)
+      
+
+        private void RunMKLink(string sLinkFlag, string sSource, string sDestination)
         {
-            // Check if container folder name ends with slash
-            // If not, add one
-            if (folderPathTextBox.Text[folderPathTextBox.Text.Length - 1] != '\\')
-                folderPathTextBox.Text += "\\";
+            string mkLinkPart = "/C mklink";
+            string cmdCommandLine = mkLinkPart + sLinkFlag +
+                                    " \"" + sDestination + "\"" +
+                                    " \"" + sSource + "\"";
 
-            // Check if the container folder exists, if not do nothing
-            if (!FileSystem.DirectoryExists(folderPathTextBox.Text))
-            {
-                OmgUtils.UserInteraction.UserInteractionUtils.ShowErrorMessageBox(
-                    Properties.Resources.FolderNotExisting, 
-                    Properties.Resources.CommonError);
-
-                return;
-            }
-
-            // Add extension if missing and item is file
-            if (!m_selectedItem.IsDirectory)
-            {
-                if (!linkNameTextBox.Text.Contains('.'))
-                    linkNameTextBox.Text += "." +
-                        OmgUtils.Path.PathUtils.GetExtension(m_selectedItem.FullPathToReference);
-            }
-            
-            // Construct full link name
-            string sFullLinkName = folderPathTextBox.Text + linkNameTextBox.Text;
-
-            // Determine kind of link
-            string sLinkFlag = "/J";    // Junction for directories
-            if (!m_selectedItem.IsDirectory)
-                sLinkFlag = "/H";       // Hard link for files
 
             // Start cmd shell and execute mklink
             var cmdProc = new Process();
-            var startInfo = new ProcessStartInfo("cmd", "/C mklink " + sLinkFlag + " \"" + 
-                                                    sFullLinkName + "\" \"" +
-                                                    m_selectedItem.FullPathToReference + "\"");
+            var startInfo = new ProcessStartInfo("cmd", cmdCommandLine);
             cmdProc.StartInfo = startInfo;
 
             OmgUtils.ProcessUt.ProcessUtils.RunProcessWithRedirectedStdErrorStdOut(cmdProc,
@@ -98,6 +188,5 @@ namespace ExplorerTreeView
                 Close();
         }
 
- 
     }
 }

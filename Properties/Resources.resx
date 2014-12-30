@@ -178,7 +178,7 @@
     <value>&lt;Enter path&gt;</value>
   </data>
   <data name="MessageHardlinkOrJunction" xml:space="preserve">
-    <value>This creates a hardlink (file) or junction (directory) at the specified location</value>
+    <value>This creates a hardlink at the specified location</value>
   </data>
   <data name="ChooseLinkFolder" xml:space="preserve">
     <value>Choose the folder that should hold the created link</value>
@@ -191,5 +191,47 @@
   </data>
   <data name="FolderNotExisting" xml:space="preserve">
     <value>The specified folder does not exist, pleas choose an existing one</value>
+  </data>
+  <data name="ContextCreateJunction" xml:space="preserve">
+    <value>Create Junction</value>
+  </data>
+  <data name="ErrorSelectedDirNeedFile" xml:space="preserve">
+    <value>The desired action can only be performed on file entries</value>
+  </data>
+  <data name="ErrorSelectedFileNeedDir" xml:space="preserve">
+    <value>The desired action can only be performed on folder entries</value>
+  </data>
+  <data name="HardLinkDestination" xml:space="preserve">
+    <value>Destination</value>
+  </data>
+  <data name="HardLinkDestinationDesc" xml:space="preserve">
+    <value>The folder that should contain the created link</value>
+  </data>
+  <data name="HardLinkName" xml:space="preserve">
+    <value>Name of the new link (extension is added if missing)</value>
+  </data>
+  <data name="HardLinkSource" xml:space="preserve">
+    <value>Source file</value>
+  </data>
+  <data name="JunctionDestination" xml:space="preserve">
+    <value>Destination folder</value>
+  </data>
+  <data name="JunctionDestinationDesc" xml:space="preserve">
+    <value>The folder that should contain the created junction</value>
+  </data>
+  <data name="JunctionName" xml:space="preserve">
+    <value>Name of the new junction</value>
+  </data>
+  <data name="JunctionSource" xml:space="preserve">
+    <value>Source foder</value>
+  </data>
+  <data name="ButtonCreateJunction" xml:space="preserve">
+    <value>Create junction</value>
+  </data>
+  <data name="MessageNewJunction" xml:space="preserve">
+    <value>This creates a new junction inside the specified folder</value>
+  </data>
+  <data name="ContextCreateHardLink" xml:space="preserve">
+    <value>Create Hard Link</value>
   </data>
 </root>

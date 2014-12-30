@@ -95,6 +95,7 @@ namespace ExplorerTreeView
 		/// This is used by every tree item
 		/// </summary>
 		public  ContextMenu GlobalContextMenu {get; set;}
+        public MenuItem GlobalCreateLinkJunctionContextItem { get; set; }
 		
 		
 		/// <summary>
@@ -500,11 +501,24 @@ namespace ExplorerTreeView
 			contextMenuItem.Click += OnContextPasteClicked;
 			GlobalContextMenu.Items.Add(contextMenuItem);
 
-            // Create hard link or junction
-            contextMenuItem = new MenuItem();
-            contextMenuItem.Header = Properties.Resources.ButtonCreateHardLink;
-            contextMenuItem.Click += OnContextCreateHardLinkClicked;
-            GlobalContextMenu.Items.Add(contextMenuItem);
+            // Linking junction (context sensitive)
+            GlobalCreateLinkJunctionContextItem = new MenuItem();
+            GlobalCreateLinkJunctionContextItem.Header = "Crate Link / Junciton";
+            GlobalCreateLinkJunctionContextItem.Click += OnContextCreateLinkClicked;
+            GlobalContextMenu.Items.Add(GlobalCreateLinkJunctionContextItem);
+
+                // Change header of element according to selection
+            GlobalContextMenu.Opened += delegate
+            {
+                var selectedItem = SelectedItem as CustomTreeItem;
+                if (selectedItem != null)
+                {
+                    if (selectedItem.IsDirectory)
+                        GlobalCreateLinkJunctionContextItem.Header = Properties.Resources.ContextCreateJunction;
+                    else
+                        GlobalCreateLinkJunctionContextItem.Header = Properties.Resources.ContextCreateHardLink;
+                }
+            };
 			
 			// Rename
 			contextMenuItem = new MenuItem();
@@ -534,19 +548,20 @@ namespace ExplorerTreeView
 			
 		}
 
-        private void OnContextCreateHardLinkClicked(object sender, RoutedEventArgs e)
+        
+
+        private void OnContextCreateLinkClicked(object sender, RoutedEventArgs e)
         {
-            var selectedItem = SelectedItem as CustomTreeItem;
+           var selectedItem = SelectedItem as CustomTreeItem;
 
-            if (selectedItem != null)
-            {
-                var link = new HardLink(selectedItem);
 
-                link.ShowDialog();
-            }
+           if (selectedItem != null)
+           {
+               LinkingDialog.ShowThisDialog(selectedItem);
+           }
         }
 
-        
+       
 		
 		void  OnContextCopyClicked(object sender, RoutedEventArgs e)
 		{

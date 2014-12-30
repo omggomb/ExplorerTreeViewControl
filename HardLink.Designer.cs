@@ -1,6 +1,6 @@
 ﻿namespace ExplorerTreeView
 {
-    partial class HardLink
+    partial class LinkingDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -30,12 +30,13 @@
         {
             this.infoLabel = new System.Windows.Forms.Label();
             this.folderLabel = new System.Windows.Forms.Label();
-            this.folderPathTextBox = new System.Windows.Forms.TextBox();
-            this.browseButton = new System.Windows.Forms.Button();
-            this.linkNameLabel = new System.Windows.Forms.Label();
-            this.linkNameTextBox = new System.Windows.Forms.TextBox();
+            this.sourceFolderPathTextBox = new System.Windows.Forms.TextBox();
+            this.sourceBrowseButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.okButton = new System.Windows.Forms.Button();
+            this.destinationLabe = new System.Windows.Forms.Label();
+            this.destinationTextBox = new System.Windows.Forms.TextBox();
+            this.destinationBrowseButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // infoLabel
@@ -56,41 +57,25 @@
             this.folderLabel.TabIndex = 1;
             this.folderLabel.Text = "label1";
             // 
-            // folderPathTextBox
+            // sourceFolderPathTextBox
             // 
-            this.folderPathTextBox.Location = new System.Drawing.Point(16, 59);
-            this.folderPathTextBox.Name = "folderPathTextBox";
-            this.folderPathTextBox.Size = new System.Drawing.Size(184, 20);
-            this.folderPathTextBox.TabIndex = 2;
+            this.sourceFolderPathTextBox.Location = new System.Drawing.Point(17, 60);
+            this.sourceFolderPathTextBox.Name = "sourceFolderPathTextBox";
+            this.sourceFolderPathTextBox.Size = new System.Drawing.Size(184, 20);
+            this.sourceFolderPathTextBox.TabIndex = 2;
             // 
-            // browseButton
+            // sourceBrowseButton
             // 
-            this.browseButton.Location = new System.Drawing.Point(207, 57);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(75, 23);
-            this.browseButton.TabIndex = 3;
-            this.browseButton.Text = "button1";
-            this.browseButton.UseVisualStyleBackColor = true;
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
-            // 
-            // linkNameLabel
-            // 
-            this.linkNameLabel.AutoSize = true;
-            this.linkNameLabel.Location = new System.Drawing.Point(15, 86);
-            this.linkNameLabel.Name = "linkNameLabel";
-            this.linkNameLabel.Size = new System.Drawing.Size(35, 13);
-            this.linkNameLabel.TabIndex = 4;
-            this.linkNameLabel.Text = "label1";
-            // 
-            // linkNameTextBox
-            // 
-            this.linkNameTextBox.Location = new System.Drawing.Point(16, 107);
-            this.linkNameTextBox.Name = "linkNameTextBox";
-            this.linkNameTextBox.Size = new System.Drawing.Size(184, 20);
-            this.linkNameTextBox.TabIndex = 5;
+            this.sourceBrowseButton.Location = new System.Drawing.Point(210, 60);
+            this.sourceBrowseButton.Name = "sourceBrowseButton";
+            this.sourceBrowseButton.Size = new System.Drawing.Size(75, 23);
+            this.sourceBrowseButton.TabIndex = 3;
+            this.sourceBrowseButton.Text = "button1";
+            this.sourceBrowseButton.UseVisualStyleBackColor = true;
             // 
             // cancelButton
             // 
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(210, 226);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
@@ -106,7 +91,31 @@
             this.okButton.TabIndex = 7;
             this.okButton.Text = "button2";
             this.okButton.UseVisualStyleBackColor = true;
-            this.okButton.Click += new System.EventHandler(this.okButton_Click);
+            // 
+            // destinationLabe
+            // 
+            this.destinationLabe.AutoSize = true;
+            this.destinationLabe.Location = new System.Drawing.Point(19, 87);
+            this.destinationLabe.Name = "destinationLabe";
+            this.destinationLabe.Size = new System.Drawing.Size(35, 13);
+            this.destinationLabe.TabIndex = 8;
+            this.destinationLabe.Text = "label1";
+            // 
+            // destinationTextBox
+            // 
+            this.destinationTextBox.Location = new System.Drawing.Point(19, 104);
+            this.destinationTextBox.Name = "destinationTextBox";
+            this.destinationTextBox.Size = new System.Drawing.Size(178, 20);
+            this.destinationTextBox.TabIndex = 9;
+            // 
+            // destinationBrowseButton
+            // 
+            this.destinationBrowseButton.Location = new System.Drawing.Point(210, 104);
+            this.destinationBrowseButton.Name = "destinationBrowseButton";
+            this.destinationBrowseButton.Size = new System.Drawing.Size(75, 23);
+            this.destinationBrowseButton.TabIndex = 10;
+            this.destinationBrowseButton.Text = "button1";
+            this.destinationBrowseButton.UseVisualStyleBackColor = true;
             // 
             // HardLink
             // 
@@ -116,12 +125,13 @@
             this.AutoSize = true;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(300, 261);
+            this.Controls.Add(this.destinationBrowseButton);
+            this.Controls.Add(this.destinationTextBox);
+            this.Controls.Add(this.destinationLabe);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.linkNameTextBox);
-            this.Controls.Add(this.linkNameLabel);
-            this.Controls.Add(this.browseButton);
-            this.Controls.Add(this.folderPathTextBox);
+            this.Controls.Add(this.sourceBrowseButton);
+            this.Controls.Add(this.sourceFolderPathTextBox);
             this.Controls.Add(this.folderLabel);
             this.Controls.Add(this.infoLabel);
             this.Name = "HardLink";
@@ -135,11 +145,12 @@
 
         private System.Windows.Forms.Label infoLabel;
         private System.Windows.Forms.Label folderLabel;
-        private System.Windows.Forms.TextBox folderPathTextBox;
-        private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.Label linkNameLabel;
-        private System.Windows.Forms.TextBox linkNameTextBox;
+        private System.Windows.Forms.TextBox sourceFolderPathTextBox;
+        private System.Windows.Forms.Button sourceBrowseButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button okButton;
+        private System.Windows.Forms.Label destinationLabe;
+        private System.Windows.Forms.TextBox destinationTextBox;
+        private System.Windows.Forms.Button destinationBrowseButton;
     }
 }

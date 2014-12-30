@@ -35,4 +35,4 @@ E:\Dev\ExplorerTreeViewControl\bin\Debug\OmgUtils.dll
 E:\Dev\ExplorerTreeViewControl\bin\Debug\OmgUtils.pdb
 E:\Dev\ExplorerTreeViewControl\obj\Debug\en\ExplorerTreeView.resources.dll
 E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.pdb
-E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.HardLink.resources
+E:\Dev\ExplorerTreeViewControl\obj\Debug\ExplorerTreeView.LinkingDialog.resources
