@@ -84,13 +84,13 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OmgUtils\OmgUtils.csproj">
-      <Project>{BB032932-C16B-4BC4-AA82-8427158A6654}</Project>
-      <Name>OmgUtils</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ExplorerTreeView.csproj">
       <Project>{79810A14-6959-4D1C-A158-C75F20520B94}</Project>
       <Name>ExplorerTreeView</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OmgUtils\OmgUtils.csproj">
+      <Project>{bb032932-c16b-4bc4-aa82-8427158a6654}</Project>
+      <Name>OmgUtils</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

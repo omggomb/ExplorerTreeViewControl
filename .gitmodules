@@ -1,0 +1,3 @@
+[submodule "OmgUtils"]
+	path = OmgUtils
+	url = https://github.com/omggomb/OmgUtils.git

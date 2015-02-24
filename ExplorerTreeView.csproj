@@ -108,8 +108,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OmgUtils\OmgUtils.csproj">
-      <Project>{BB032932-C16B-4BC4-AA82-8427158A6654}</Project>
+    <ProjectReference Include="OmgUtils\OmgUtils.csproj">
+      <Project>{bb032932-c16b-4bc4-aa82-8427158a6654}</Project>
       <Name>OmgUtils</Name>
     </ProjectReference>
   </ItemGroup>
