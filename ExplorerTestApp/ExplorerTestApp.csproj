@@ -71,6 +71,11 @@
     </Compile>
     <Compile Include="ItemFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resource1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\WPFAssemblyInfo.cs" />
     <Compile Include="Window1.xaml.cs">
       <SubType>Code</SubType>
@@ -92,6 +97,15 @@
       <Project>{bb032932-c16b-4bc4-aa82-8427158a6654}</Project>
       <Name>OmgUtils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\SimpleFolderIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resource1.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

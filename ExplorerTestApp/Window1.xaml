@@ -2,18 +2,15 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:l="clr-namespace:ExplorerTreeView;assembly=ExplorerTreeView"
-	Title="ExplorerTestApp" Height="300" Width="300"
-	>
-	<Grid>
-		<l:ExplorerTreeViewControl WatchDir="E:\Dev\CEWSP" IsWatching="True" Name="explorerTreeView">
-			<l:ExplorerTreeViewControl.ItemContainerStyle>
-				<Style TargetType="l:CustomTreeItem">
-					<Setter Property="HorizontalContentAlignment" Value="Left" />
-					<Setter Property="VerticalContentAlignment" Value="Top" />
-				</Style>
-			
-			</l:ExplorerTreeViewControl.ItemContainerStyle>
-		
-		</l:ExplorerTreeViewControl>
-	</Grid>
+	Title="ExplorerTestApp" Height="300" Width="300">
+    <Grid>
+        <l:ExplorerTreeViewControl WatchDir=".\" IsWatching="True" Name="explorerTreeView">
+            <l:ExplorerTreeViewControl.ItemContainerStyle>
+                <Style TargetType="l:CustomTreeItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Left" />
+                    <Setter Property="VerticalContentAlignment" Value="Top" />
+                </Style>
+            </l:ExplorerTreeViewControl.ItemContainerStyle>
+        </l:ExplorerTreeViewControl>
+    </Grid>
 </Window>
